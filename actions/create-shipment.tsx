@@ -17,6 +17,8 @@ export const createShipment = async (
       return { error: "Unable to verify Payment" };
     }
 
+    const apiUrl = `https://api.phonepe.com/apis/hermes/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}`;
+
     const xVerify =
       sha256(
         `/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}` +
@@ -25,22 +27,18 @@ export const createShipment = async (
       `###` +
       process.env.MERCHANT_KEY;
 
-    console.log(xVerify);
-
     const options = {
+      method: "GET",
       headers: {
         accept: "application/json",
         "Content-Type": "application/json",
+        "X-MERCHANT-ID": process.env.MERCHANT_ID as string,
         "X-VERIFY": xVerify,
-        "X-MERCHANT-ID": transactionId,
       },
     };
 
     try {
-      const isVerified = await fetch(
-        `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}`,
-        options
-      );
+      const isVerified = await fetch(apiUrl, options);
       const verifiedStatus = await isVerified.json();
 
       console.log(verifiedStatus);
@@ -69,7 +67,7 @@ export const createShipment = async (
       (parseInt(allOrdersData.data[0].order_number) + 1).toString()
     );
     formData.append("payment_method", payment);
-    formData.append("amount", payment === "COD" ? "499" : "1");
+    formData.append("amount", payment === "COD" ? "499" : "399");
     formData.append("fname", data.fname);
     formData.append("lname", data.lname);
     formData.append("address", data.add1);
