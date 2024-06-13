@@ -14,7 +14,7 @@ export const createPayment = async (v: z.infer<typeof formSchema>) => {
   const endpoint = "/pg/v1/pay";
 
   const redirectUrl =
-    "http://localhost:3000/confirm/" +
+    "https://zigzagmade.com/confirm/" +
     merchantTransactionId +
     `?fname=${v.fname}&lname=${v.lname}&number=${v.number}&add1=${v.add1}&add2=${v.add2}&pincode=${v.pincode}&state=${v.state}&city=${v.city}`;
 
