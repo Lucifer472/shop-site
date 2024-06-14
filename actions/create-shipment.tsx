@@ -1,57 +1,54 @@
 "use server";
-import * as z from "zod";
+import { db } from "@/lib/db";
 import sha256 from "sha256";
 
-import { formSchema } from "@/schema";
-
-export const createShipment = async (
-  data: z.infer<typeof formSchema>,
-  payment: "prepaid" | "COD",
-  transactionId?: string
-) => {
+export const createShipment = async (transactionId: string) => {
   const headers = new Headers();
   headers.append("NP-API-KEY", process.env.NIMBUS_API as string);
 
-  if (payment === "prepaid") {
-    if (!transactionId) {
-      return { error: "Unable to verify Payment" };
-    }
+  const apiUrl = `/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}`;
 
-    const apiUrl = `https://api.phonepe.com/apis/hermes/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}`;
+  const xVerify =
+    sha256(
+      `${process.env.PHONE_PAY_API}/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}` +
+        process.env.MERCHANT_SALT
+    ) +
+    `###` +
+    process.env.MERCHANT_KEY;
 
-    const xVerify =
-      sha256(
-        `/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}` +
-          process.env.MERCHANT_SALT
-      ) +
-      `###` +
-      process.env.MERCHANT_KEY;
-
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-        "X-MERCHANT-ID": process.env.MERCHANT_ID as string,
-        "X-VERIFY": xVerify,
-      },
-    };
-
-    try {
-      const isVerified = await fetch(apiUrl, options);
-      const verifiedStatus = await isVerified.json();
-
-      console.log(verifiedStatus);
-
-      if (verifiedStatus.code !== "PAYMENT_SUCCESS") {
-        return { error: verifiedStatus.code };
-      }
-    } catch (error) {
-      return { error: "Something went wrong" };
-    }
-  }
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+      "X-MERCHANT-ID": process.env.MERCHANT_ID as string,
+      "X-VERIFY": xVerify,
+    },
+  };
 
   try {
+    const isVerified = await fetch(apiUrl, options);
+    const verifiedStatus = await isVerified.json();
+
+    if (verifiedStatus.code !== "PAYMENT_SUCCESS") {
+      return { error: verifiedStatus.code };
+    }
+
+    const transData = await db.transaction.findUnique({
+      where: {
+        transactionId,
+      },
+      include: {
+        order: true,
+      },
+    });
+
+    if (transData?.order.orderId) {
+      return { error: "Order Already Placed!" };
+    }
+
+    const data: any = transData?.order.data;
+
     const allOrders = await fetch("https://ship.nimbuspost.com/api/orders", {
       method: "GET",
       headers,
@@ -66,8 +63,8 @@ export const createShipment = async (
       "order_number",
       (parseInt(allOrdersData.data[0].order_number) + 1).toString()
     );
-    formData.append("payment_method", payment);
-    formData.append("amount", payment === "COD" ? "499" : "399");
+    formData.append("payment_method", "prepaid");
+    formData.append("amount", "399");
     formData.append("fname", data.fname);
     formData.append("lname", data.lname);
     formData.append("address", data.add1);
@@ -79,7 +76,7 @@ export const createShipment = async (
     formData.append("pincode", data.pincode);
     formData.append("products[0][name]", "Slim Fit");
     formData.append("products[0][qty]", "1");
-    formData.append("products[0][price]", payment === "COD" ? "499" : "399");
+    formData.append("products[0][price]", "399");
 
     const res = await fetch("https://ship.nimbuspost.com/api/orders/create", {
       method: "POST",
@@ -89,6 +86,15 @@ export const createShipment = async (
     });
 
     const resData = await res.json();
+
+    await db.order.update({
+      where: {
+        id: transData?.order.id,
+      },
+      data: {
+        orderId: resData.data.toString(),
+      },
+    });
 
     return { success: resData };
   } catch (error) {

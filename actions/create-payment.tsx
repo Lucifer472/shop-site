@@ -6,24 +6,19 @@ import uniqid from "uniqid";
 import sha256 from "sha256";
 
 import { formSchema } from "@/schema";
+import { createNewOrder, createNewPayment } from "@/lib/order";
 
 export const createPayment = async (v: z.infer<typeof formSchema>) => {
-  const apiUrl = "https://api.phonepe.com/apis/hermes";
-
   const merchantTransactionId = uniqid();
   const endpoint = "/pg/v1/pay";
-
-  const redirectUrl =
-    "https://zigzagmade.com/confirm/" +
-    merchantTransactionId +
-    `?fname=${v.fname}&lname=${v.lname}&number=${v.number}&add1=${v.add1}&add2=${v.add2}&pincode=${v.pincode}&state=${v.state}&city=${v.city}`;
 
   const payload = {
     merchantId: process.env.MERCHANT_ID,
     merchantTransactionId,
     merchantUserId: 547,
-    amount: 100,
-    redirectUrl,
+    amount: 39900,
+    redirectUrl:
+      process.env.NEXT_PUBLIC_URL + "/confirm/" + merchantTransactionId,
     redirectMode: "REDIRECT",
     mobileNumber: "9999999999",
     paymentInstrument: {
@@ -52,9 +47,24 @@ export const createPayment = async (v: z.infer<typeof formSchema>) => {
       }),
     };
 
-    const res = await fetch(`${apiUrl}${endpoint}`, options);
+    const res = await fetch(`${process.env.PHONE_PAY_API}${endpoint}`, options);
 
     const resData = await res.json();
+
+    const order = await createNewOrder(v, v.number, "Prepaid");
+
+    if (order.error) {
+      return { error: "Unable to create Order" };
+    }
+
+    const payment = await createNewPayment(
+      merchantTransactionId,
+      order.success?.id as string
+    );
+
+    if (payment.error) {
+      return { error: "Unable to create Payment" };
+    }
 
     return { success: resData };
   } catch (error) {

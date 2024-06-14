@@ -13,8 +13,8 @@ import { OrderLoader } from "../etc/order-loader";
 
 import { cn } from "@/lib/utils";
 import { createPayment } from "@/actions/create-payment";
-import { createShipment } from "@/actions/create-shipment";
 import { useRouter } from "next/navigation";
+import { createCodShipment } from "@/actions/create-cod-shipment";
 
 const SelectOrderType = ({
   data,
@@ -44,18 +44,8 @@ const SelectOrderType = ({
 
   const handleCashOnDelivery = () => {
     setLoading(true);
-    createShipment(data, "COD").then((res) => {
-      if (res.success) {
-        if (res.success.status) {
-          setMsg(true);
-        } else {
-          setMsg(false);
-        }
-      }
-
-      if (res.error) {
-        setMsg(false);
-      }
+    createCodShipment(data).then((res) => {
+      setMsg(true);
     });
   };
 

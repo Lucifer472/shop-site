@@ -3,6 +3,8 @@
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 
+import { confirmCodOrderRedirect, errorCodOrderRedirect } from "@/constant";
+
 export const OrderLoader = ({
   loading,
   setLoading,
@@ -28,12 +30,14 @@ export const OrderLoader = ({
     setIsOpen(false);
 
     if (redirect) {
-      router.push("/");
+      router.push(confirmCodOrderRedirect);
+    } else {
+      router.push(errorCodOrderRedirect);
     }
   };
 
   return (
-    <div className="w-full min-h-[350px] bg-white rounded-lg flex flex-col items-center justify-center">
+    <div className="max-w-[400px] w-full min-h-[350px] bg-white rounded-lg flex flex-col items-center justify-center">
       {msg === null && (
         <>
           <ClipLoader
@@ -48,7 +52,7 @@ export const OrderLoader = ({
           </span>
         </>
       )}
-      {msg === true && (
+      {msg === false && (
         <>
           <svg
             width="150px"
@@ -66,6 +70,11 @@ export const OrderLoader = ({
               fill="#74E8AE"
             />
           </svg>
+          <p className="text-center">
+            Thank You for Ordering with Us <br /> You Will receive confirmation
+            <br />
+            Message shortly{" "}
+          </p>
           <button
             onClick={() => handleConfirm(true)}
             className="px-12 py-4 rounded-md text-white bg-main-green font-semibold hover:shadow-md hover:underline mt-6"
@@ -74,7 +83,7 @@ export const OrderLoader = ({
           </button>
         </>
       )}{" "}
-      {msg === false && (
+      {msg === true && (
         <div className="flex items-center justify-center flex-col">
           <svg
             version="1.1"
@@ -112,7 +121,10 @@ export const OrderLoader = ({
               </g>
             </g>
           </svg>
-          <p className="text-xl mt-4">Something went Wrong</p>
+          <p className="text-center mt-4">
+            Sorry, Unable to place Order <br /> Please Try Reaching us through
+            below link
+          </p>
           <button
             onClick={() => handleConfirm(false)}
             className="px-12 py-4 rounded-md text-white bg-red-600 font-semibold hover:shadow-md hover:underline mt-6"

@@ -4,20 +4,24 @@ import { createShipment } from "@/actions/create-shipment";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
-const VerifyPaymentStatus = ({ id, data }: { id: string; data: any }) => {
+const VerifyPaymentStatus = ({ id }: { id: string }) => {
   const [success, setSuccess] = useState<null | boolean>(null);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    createShipment(data, "prepaid", id).then((res) => {
+    createShipment(id).then((res) => {
+      console.log(res);
       if (res.success) {
+        setMsg(res.success);
         setSuccess(true);
       }
 
       if (res.error) {
+        setMsg(res.error);
         setSuccess(false);
       }
     });
-  }, [setSuccess, data, id]);
+  }, [id]);
 
   const handleConfirm = (v: boolean) => {
     console.log("IT WORKs");
@@ -25,7 +29,7 @@ const VerifyPaymentStatus = ({ id, data }: { id: string; data: any }) => {
 
   return (
     <div className="flex flex-col items-center justify-center py-6">
-      {data === null && (
+      {success === null && (
         <>
           <ClipLoader
             cssOverride={{
@@ -59,6 +63,7 @@ const VerifyPaymentStatus = ({ id, data }: { id: string; data: any }) => {
               fill="#74E8AE"
             />
           </svg>
+          <p className="mt-6 text-xl font-medium">{msg}</p>
           <button
             onClick={() => handleConfirm(true)}
             className="px-12 py-4 rounded-md text-white bg-main-green font-semibold hover:shadow-md hover:underline mt-6"
@@ -105,7 +110,7 @@ const VerifyPaymentStatus = ({ id, data }: { id: string; data: any }) => {
               </g>
             </g>
           </svg>
-          <p className="text-xl mt-4">Something went Wrong</p>
+          <p className="mt-6 text-xl font-medium">{msg}</p>
           <button
             onClick={() => handleConfirm(false)}
             className="px-12 py-4 rounded-md text-white bg-red-600 font-semibold hover:shadow-md hover:underline mt-6"
