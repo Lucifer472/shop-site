@@ -11,12 +11,14 @@ export const OrderLoader = ({
   msg,
   setMsg,
   setIsOpen,
+  text,
 }: {
   loading: boolean;
   setLoading: (v: boolean) => void;
   msg: boolean | null;
   setMsg: (v: boolean | null) => void;
   setIsOpen: (v: boolean) => void;
+  text?: string;
 }) => {
   const router = useRouter();
 
@@ -52,7 +54,7 @@ export const OrderLoader = ({
           </span>
         </>
       )}
-      {msg === false && (
+      {msg === true && (
         <>
           <svg
             width="150px"
@@ -83,7 +85,7 @@ export const OrderLoader = ({
           </button>
         </>
       )}{" "}
-      {msg === true && (
+      {msg === false && (
         <div className="flex items-center justify-center flex-col">
           <svg
             version="1.1"
@@ -122,8 +124,10 @@ export const OrderLoader = ({
             </g>
           </svg>
           <p className="text-center mt-4">
-            Sorry, Unable to place Order <br /> Please Try Reaching us through
-            below link
+            {text
+              ? text
+              : `Sorry, Unable to place Order <br /> Please Try Reaching us through
+            below link`}
           </p>
           <button
             onClick={() => handleConfirm(false)}

@@ -28,6 +28,7 @@ const SelectOrderType = ({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<boolean | null>(null);
+  const [text, setText] = useState("");
 
   const handlePayOnline = () => {
     setLoading(true);
@@ -36,8 +37,10 @@ const SelectOrderType = ({
         console.log(res.success);
         router.push(res.success.data.instrumentResponse.redirectInfo.url);
       }
+      console.log(res);
       if (res.error) {
         setMsg(false);
+        setText(res.error);
       }
     });
   };
@@ -45,7 +48,15 @@ const SelectOrderType = ({
   const handleCashOnDelivery = () => {
     setLoading(true);
     createCodShipment(data).then((res) => {
-      setMsg(true);
+      if (res.error) {
+        setMsg(false);
+        setText(res.error);
+      }
+
+      if (res.success) {
+        setMsg(true);
+        setText(res.success);
+      }
     });
   };
 
@@ -63,6 +74,7 @@ const SelectOrderType = ({
           setLoading={setLoading}
           setMsg={setMsg}
           setIsOpen={setIsOpen}
+          text={text}
         />
       ) : (
         <Card>
