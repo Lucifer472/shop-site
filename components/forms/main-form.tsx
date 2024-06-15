@@ -1,5 +1,6 @@
 "use client";
 import * as z from "zod";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -35,7 +36,6 @@ import { states } from "@/constant";
 
 import { createCodShipment } from "@/actions/create-cod-shipment";
 import { createPayment } from "@/actions/create-payment";
-import { useRef } from "react";
 
 export const MainForm = ({
   setIsSuccess,
@@ -93,6 +93,18 @@ export const MainForm = ({
     }
   };
 
+  const handleKeyPress = (event: any) => {
+    // Allow control characters like backspace
+    const isControlChar =
+      event.key === "Backspace" ||
+      event.key === "Delete" ||
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight";
+    if (!/[0-9]/.test(event.key) && !isControlChar) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <Form {...form}>
       <form
@@ -147,11 +159,20 @@ export const MainForm = ({
                 Phone Number<span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <InputForm
-                  field={field}
-                  icon={PhoneCall}
-                  placeholder="Number [10 digit only]"
-                />
+                <div className="grid grid-cols-7 justify-start items-center border border-gray-300 rounded-md">
+                  <PhoneCall className="w-10 h-10 p-2 text-black bg-gray-200 rounded-l-md col-span-1" />
+                  <input
+                    {...field}
+                    required
+                    type="text"
+                    className="outline-none px-1 col-span-6"
+                    pattern="[0-9]*"
+                    placeholder="Number [10 digit only]"
+                    accept="[0-9]*"
+                    onKeyDown={handleKeyPress}
+                    inputMode="numeric"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -207,11 +228,20 @@ export const MainForm = ({
                 <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <InputForm
-                  field={field}
-                  icon={HashIcon}
-                  placeholder="Pincode [6 digit only]"
-                />
+                <div className="grid grid-cols-7 justify-start items-center border border-gray-300 rounded-md">
+                  <HashIcon className="w-10 h-10 p-2 text-black bg-gray-200 rounded-l-md col-span-1" />
+                  <input
+                    {...field}
+                    required
+                    type="text"
+                    className="outline-none px-1 col-span-6"
+                    pattern="[0-9]*"
+                    placeholder="Pincode [6 digit only]"
+                    accept="[0-9]*"
+                    onKeyDown={handleKeyPress}
+                    inputMode="numeric"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

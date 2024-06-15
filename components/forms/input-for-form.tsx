@@ -2,7 +2,6 @@ export const InputForm = ({
   field,
   placeholder,
   icon: Icon,
-  others,
 }: {
   field: any;
   placeholder: string;
@@ -16,7 +15,6 @@ export const InputForm = ({
         {...field}
         required
         type="text"
-        {...others}
         className="outline-none px-1 col-span-6"
         placeholder={placeholder}
       />
