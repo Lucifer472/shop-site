@@ -6,11 +6,11 @@ export const createShipment = async (transactionId: string) => {
   const headers = new Headers();
   headers.append("NP-API-KEY", process.env.NIMBUS_API as string);
 
-  const apiUrl = `/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}`;
+  const apiUrl = `${process.env.PHONE_PAY_API}/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}`;
 
   const xVerify =
     sha256(
-      `${process.env.PHONE_PAY_API}/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}` +
+      `/pg/v1/status/${process.env.MERCHANT_ID}/${transactionId}` +
         process.env.MERCHANT_SALT
     ) +
     `###` +

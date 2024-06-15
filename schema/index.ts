@@ -9,4 +9,5 @@ export const formSchema = z.object({
   pincode: z.string().length(6),
   state: z.string(),
   city: z.string().min(5).max(50),
+  type: z.enum(["cod", "online"]),
 });

@@ -76,6 +76,9 @@
 }
 
 @layer components {
+ .scroll-smooth {
+  scroll-behavior: smooth;
+}
   .button-animation {
     position: relative;
     animation: bounce 0.86s both cubic-bezier(0.35, 0.06, 0.2, 0.98);

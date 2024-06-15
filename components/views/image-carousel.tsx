@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { imageCarousel } from "@/constant";
@@ -8,6 +8,9 @@ import { cn } from "@/lib/utils";
 
 const ImageCarousel = () => {
   const [currentImage, setCurrentImage] = useState(0);
+
+  const touchStartXRef = useRef(null);
+  const touchEndXRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,6 +22,44 @@ const ImageCarousel = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) =>
+        imageCarousel.length > prev + 1 ? prev + 1 : 0
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleTouchStart = (e: any) => {
+    touchStartXRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: any) => {
+    touchEndXRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartXRef.current !== null && touchEndXRef.current !== null) {
+      const distance = touchStartXRef.current - touchEndXRef.current;
+      if (distance > 50) {
+        // Swipe left
+        setCurrentImage((prev) =>
+          imageCarousel.length > prev + 1 ? prev + 1 : 0
+        );
+      } else if (distance < -50) {
+        // Swipe right
+        setCurrentImage((prev) =>
+          prev - 1 >= 0 ? prev - 1 : imageCarousel.length - 1
+        );
+      }
+    }
+
+    touchStartXRef.current = null;
+    touchEndXRef.current = null;
+  };
+
   return (
     <div className="w-full overflow-hidden">
       <div
@@ -26,6 +67,9 @@ const ImageCarousel = () => {
         style={{
           transform: `translateX(-${currentImage * 100}%)`,
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {imageCarousel.map((i) => (
           <figure

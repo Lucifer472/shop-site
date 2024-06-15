@@ -8,6 +8,8 @@ export const Timer = () => {
     s: 59,
   });
 
+  const [per, setPer] = useState(100);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCountdown((prev) => {
@@ -26,10 +28,21 @@ export const Timer = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPer((prev) => (prev > 0 ? prev - 0.01 : 0));
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex flex-col w-full">
-      <div>
-        
+      <div className="relative w-full h-2 bg-gray-200">
+        <span
+          className="absolute h-2 bg-main-green transition-all duration-100"
+          style={{ width: `${per}%` }}
+        ></span>
       </div>
       <div className="grid grid-cols-11 w-full items-center my-1">
         <p className="text-lg col-span-3 font-medium text-center">

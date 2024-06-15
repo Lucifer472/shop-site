@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className={poppins.className}>
         <main className="flex flex-col w-full max-w-xl mx-auto">
           <Header />

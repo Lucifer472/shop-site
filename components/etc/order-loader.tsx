@@ -10,26 +10,19 @@ export const OrderLoader = ({
   setLoading,
   msg,
   setMsg,
-  setIsOpen,
   text,
 }: {
   loading: boolean;
   setLoading: (v: boolean) => void;
   msg: boolean | null;
   setMsg: (v: boolean | null) => void;
-  setIsOpen: (v: boolean) => void;
   text?: string;
 }) => {
   const router = useRouter();
 
-  if (!loading) {
-    return;
-  }
-
   const handleConfirm = (redirect: boolean) => {
     setLoading(false);
     setMsg(null);
-    setIsOpen(false);
 
     if (redirect) {
       router.push(confirmCodOrderRedirect);
@@ -39,7 +32,7 @@ export const OrderLoader = ({
   };
 
   return (
-    <div className="max-w-[400px] w-full min-h-[350px] bg-white rounded-lg flex flex-col items-center justify-center">
+    <div className="max-w-[400px] min-w-[300px] w-full min-h-[350px] bg-white rounded-lg flex flex-col items-center justify-center">
       {msg === null && (
         <>
           <ClipLoader

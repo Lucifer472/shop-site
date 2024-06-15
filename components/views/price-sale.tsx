@@ -25,6 +25,7 @@ const Price = () => {
         </span>{" "}
         LEFT
       </h3>
+     
       <Timer />
       <p className="text-main-green w-full text-center my-2 text-sm">
         Sale Ends Once The Timer Hits Zero!

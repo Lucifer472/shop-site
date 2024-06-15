@@ -12,7 +12,7 @@ const VerifyPaymentStatus = ({ id }: { id: string }) => {
     createShipment(id).then((res) => {
       console.log(res);
       if (res.success) {
-        setMsg(res.success);
+        setMsg(`Order Placed Successfully OrderId:${res.success.data}`);
         setSuccess(true);
       }
 
@@ -63,7 +63,7 @@ const VerifyPaymentStatus = ({ id }: { id: string }) => {
               fill="#74E8AE"
             />
           </svg>
-          <p className="mt-6 text-xl font-medium">{msg}</p>
+          {/* <p className="mt-6 text-xl font-medium">{msg}</p> */}
           <button
             onClick={() => handleConfirm(true)}
             className="px-12 py-4 rounded-md text-white bg-main-green font-semibold hover:shadow-md hover:underline mt-6"
