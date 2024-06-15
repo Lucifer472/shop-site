@@ -17,7 +17,7 @@ export const createPayment = async (v: z.infer<typeof formSchema>) => {
     merchantId: process.env.MERCHANT_ID,
     merchantTransactionId,
     merchantUserId: 547,
-    amount: 39900,
+    amount: 200,
     redirectUrl:
       process.env.NEXT_PUBLIC_URL + "/confirm/" + merchantTransactionId,
     redirectMode: "REDIRECT",
