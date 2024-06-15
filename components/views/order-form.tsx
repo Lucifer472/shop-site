@@ -1,23 +1,14 @@
 "use client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { MainForm } from "@/components/forms/main-form";
-import { AnimatedButton } from "@/components/forms/animated-button";
 
 import { productPrice } from "@/constant";
 import { OrderLoader } from "../etc/order-loader";
 
 const OrderForm = () => {
-  const mainForm = useRef<HTMLFormElement | null>(null);
-
   const [msg, setMsg] = useState("");
   const [isSuccessful, setIsSuccessful] = useState<null | boolean>(null);
   const [loading, setLoading] = useState(false);
@@ -56,15 +47,11 @@ const OrderForm = () => {
         </CardTitle>
         <CardContent className="px-2 py-4">
           <MainForm
-            mainForm={mainForm}
             setText={setMsg}
             setIsSuccess={setIsSuccessful}
             setLoading={setLoading}
           />
         </CardContent>
-        <CardFooter className="p-0 mt-2">
-          <AnimatedButton form={mainForm.current} />
-        </CardFooter>
       </Card>
     </>
   );

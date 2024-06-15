@@ -28,28 +28,40 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { InputForm } from "@/components/forms/input-for-form";
+import { AnimatedButton } from "@/components/forms/animated-button";
 
 import { formSchema } from "@/schema";
 import { states } from "@/constant";
 
 import { createCodShipment } from "@/actions/create-cod-shipment";
 import { createPayment } from "@/actions/create-payment";
+import { useRef } from "react";
 
 export const MainForm = ({
-  mainForm,
   setIsSuccess,
   setText,
   setLoading,
 }: {
-  mainForm: any;
   setIsSuccess: (v: any) => void;
   setText: (v: string) => void;
   setLoading: (v: boolean) => void;
 }) => {
   const router = useRouter();
+  const mainForm = useRef<HTMLFormElement | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      add1: "",
+      add2: "",
+      city: "",
+      fname: "",
+      lname: "",
+      number: "",
+      pincode: "",
+      state: "",
+      type: "cod",
+    },
   });
 
   const onSubmit = (v: z.infer<typeof formSchema>) => {
@@ -290,6 +302,7 @@ export const MainForm = ({
             </FormItem>
           )}
         />
+        <AnimatedButton form={mainForm.current} />
       </form>
     </Form>
   );
