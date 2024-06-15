@@ -100,7 +100,7 @@ export const MainForm = ({
                 <InputForm
                   field={field}
                   icon={UserIcon}
-                  placeholder="Full Name"
+                  placeholder="First Name"
                 />
               </FormControl>
               <FormMessage />
@@ -119,7 +119,7 @@ export const MainForm = ({
                 <InputForm
                   field={field}
                   icon={UserIcon}
-                  placeholder="Full Name"
+                  placeholder="Last Name"
                 />
               </FormControl>
               <FormMessage />
