@@ -1,20 +1,18 @@
-import { productOriginalPrice, productPrice } from "@/constant";
-
 import { Timer } from "@/components/etc/timer";
 
-const Price = () => {
+const Price = ({ ogPrice, price }: { ogPrice: number; price: number }) => {
   return (
     <div className="flex flex-col gap-y-2 w-full">
       <div className="flex items-center justify-start gap-x-4">
         <span className="font-semibold line-through text-xl">
-          Rs. {productOriginalPrice.toLocaleString()}.00
+          Rs. {ogPrice.toString() + ".00"}
         </span>
         <span className="font-semibold text-main-green text-xl">
-          Rs. {productPrice.toLocaleString()}.00
+          Rs. {price.toString() + ".00"}
         </span>
         <div className="p-1 border-2 border-black flex items-center justify-center">
           <span className="font-semibold text-xl">
-            {Math.round((productPrice * 100) / productOriginalPrice)}% OFF
+            {Math.round((price * 100) / ogPrice)}% OFF
           </span>
         </div>
       </div>
@@ -25,7 +23,7 @@ const Price = () => {
         </span>{" "}
         LEFT
       </h3>
-     
+
       <Timer />
       <p className="text-main-green w-full text-center my-2 text-sm">
         Sale Ends Once The Timer Hits Zero!

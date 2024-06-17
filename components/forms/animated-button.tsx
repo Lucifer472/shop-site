@@ -2,10 +2,9 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { productPrice } from "@/constant";
 import { useRouter } from "next/navigation";
 
-export const AnimatedButton = () => {
+export const AnimatedButton = ({ price }: { price: string }) => {
   const [animateButton, setAnimateButton] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -51,9 +50,7 @@ export const AnimatedButton = () => {
       )}
       type="submit"
     >
-      <span className="font-semibold">
-        COMPLETE ORDER - Rs. {productPrice}.00
-      </span>
+      <span className="font-semibold">COMPLETE ORDER - Rs. {price}</span>
       <br />
       <span>offer Ending Today! Hurry Up! ⏰</span>
     </button>

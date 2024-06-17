@@ -40,10 +40,16 @@ export const MainForm = ({
   setIsSuccess,
   setText,
   setLoading,
+  title,
+  price1,
+  price2,
 }: {
   setIsSuccess: (v: any) => void;
   setText: (v: string) => void;
   setLoading: (v: boolean) => void;
+  title: string;
+  price1: number;
+  price2: string;
 }) => {
   const router = useRouter();
 
@@ -65,7 +71,7 @@ export const MainForm = ({
   const onSubmit = (v: z.infer<typeof formSchema>) => {
     setLoading(true);
     if (v.type === "cod") {
-      createCodShipment(v).then((res) => {
+      createCodShipment(v, price2, title).then((res) => {
         if (res.error) {
           setIsSuccess(false);
           setText(res.error);
@@ -78,12 +84,11 @@ export const MainForm = ({
         form.reset();
       });
     } else {
-      createPayment(v).then((res) => {
+      createPayment(v, price1, v.number, title).then((res) => {
         if (res.success) {
           console.log(res.success);
           router.push(res.success.data.instrumentResponse.redirectInfo.url);
         }
-        console.log(res);
         if (res.error) {
           setIsSuccess(false);
           setText(res.error);
@@ -332,7 +337,7 @@ export const MainForm = ({
             </FormItem>
           )}
         />
-        <AnimatedButton />
+        <AnimatedButton price={price2} />
       </form>
     </Form>
   );

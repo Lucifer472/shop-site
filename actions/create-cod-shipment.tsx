@@ -2,9 +2,12 @@
 import * as z from "zod";
 
 import { formSchema } from "@/schema";
-import { productPrice, productTitle } from "@/constant";
 
-export const createCodShipment = async (data: z.infer<typeof formSchema>) => {
+export const createCodShipment = async (
+  data: z.infer<typeof formSchema>,
+  price: string,
+  title: string
+) => {
   const headers = new Headers();
   headers.append("NP-API-KEY", process.env.NIMBUS_API as string);
 
@@ -24,7 +27,7 @@ export const createCodShipment = async (data: z.infer<typeof formSchema>) => {
       (parseInt(allOrdersData.data[0].order_number) + 1).toString()
     );
     formData.append("payment_method", "COD");
-    formData.append("amount", productPrice.toString());
+    formData.append("amount", price);
     formData.append("fname", data.fname);
     formData.append("lname", data.lname);
     formData.append("address", data.add1);
@@ -34,9 +37,9 @@ export const createCodShipment = async (data: z.infer<typeof formSchema>) => {
     formData.append("state", data.state);
     formData.append("country", "india");
     formData.append("pincode", data.pincode);
-    formData.append("products[0][name]", productTitle);
+    formData.append("products[0][name]", title);
     formData.append("products[0][qty]", "1");
-    formData.append("products[0][price]", productPrice.toString());
+    formData.append("products[0][price]", price);
 
     const res = await fetch("https://ship.nimbuspost.com/api/orders/create", {
       method: "POST",

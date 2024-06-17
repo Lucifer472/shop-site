@@ -4,11 +4,17 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { MainForm } from "@/components/forms/main-form";
+import { OrderLoader } from "@/components/etc/order-loader";
 
-import { productPrice } from "@/constant";
-import { OrderLoader } from "../etc/order-loader";
-
-const OrderForm = () => {
+const OrderForm = ({
+  title,
+  price1,
+  price2,
+}: {
+  title: string;
+  price1: number;
+  price2: string;
+}) => {
   const [msg, setMsg] = useState("");
   const [isSuccessful, setIsSuccessful] = useState<null | boolean>(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +36,7 @@ const OrderForm = () => {
         <CardHeader className="bg-gray-200 rounded-md">
           <div className="flex items-center justify-between w-full">
             <span>Subtotal</span>
-            <span className="text-lg font-medium">Rs. {productPrice}.00</span>
+            <span className="text-lg font-medium">Rs. {price2}</span>
           </div>{" "}
           <div className="flex items-center justify-between w-full">
             <span>Shipping</span>
@@ -39,7 +45,7 @@ const OrderForm = () => {
           <div className="w-full h-[1px] bg-black"></div>{" "}
           <div className="flex items-center justify-between w-full">
             <span className="text-lg font-medium">Total</span>
-            <span className="text-lg font-medium">Rs. {productPrice}.00</span>
+            <span className="text-lg font-medium">Rs. {price2}</span>
           </div>
         </CardHeader>
         <CardTitle className="text-xl font-semibold text-center pt-2">
@@ -50,6 +56,9 @@ const OrderForm = () => {
             setText={setMsg}
             setIsSuccess={setIsSuccessful}
             setLoading={setLoading}
+            title={title}
+            price1={price1}
+            price2={price2}
           />
         </CardContent>
       </Card>

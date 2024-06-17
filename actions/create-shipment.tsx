@@ -1,9 +1,9 @@
 "use server";
-import { productTitle } from "@/constant";
+
 import { db } from "@/lib/db";
 import sha256 from "sha256";
 
-export const createShipment = async (transactionId: string) => {
+export const createShipment = async (transactionId: string, title: string) => {
   const headers = new Headers();
   headers.append("NP-API-KEY", process.env.NIMBUS_API as string);
 
@@ -75,7 +75,7 @@ export const createShipment = async (transactionId: string) => {
     formData.append("state", data.state);
     formData.append("country", "india");
     formData.append("pincode", data.pincode);
-    formData.append("products[0][name]", productTitle);
+    formData.append("products[0][name]", title);
     formData.append("products[0][qty]", "1");
     formData.append("products[0][price]", "399");
 

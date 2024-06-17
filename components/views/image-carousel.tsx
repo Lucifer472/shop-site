@@ -2,11 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import { imageCarousel } from "@/constant";
-
 import { cn } from "@/lib/utils";
 
-const ImageCarousel = () => {
+const ImageCarousel = ({ images }: { images: string[] }) => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const touchStartXRef = useRef(null);
@@ -14,23 +12,19 @@ const ImageCarousel = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImage((prev) =>
-        imageCarousel.length > prev + 1 ? prev + 1 : 0
-      );
+      setCurrentImage((prev) => (images.length > prev + 1 ? prev + 1 : 0));
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImage((prev) =>
-        imageCarousel.length > prev + 1 ? prev + 1 : 0
-      );
+      setCurrentImage((prev) => (images.length > prev + 1 ? prev + 1 : 0));
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [images]);
 
   const handleTouchStart = (e: any) => {
     touchStartXRef.current = e.targetTouches[0].clientX;
@@ -45,13 +39,11 @@ const ImageCarousel = () => {
       const distance = touchStartXRef.current - touchEndXRef.current;
       if (distance > 50) {
         // Swipe left
-        setCurrentImage((prev) =>
-          imageCarousel.length > prev + 1 ? prev + 1 : 0
-        );
+        setCurrentImage((prev) => (images.length > prev + 1 ? prev + 1 : 0));
       } else if (distance < -50) {
         // Swipe right
         setCurrentImage((prev) =>
-          prev - 1 >= 0 ? prev - 1 : imageCarousel.length - 1
+          prev - 1 >= 0 ? prev - 1 : images.length - 1
         );
       }
     }
@@ -71,13 +63,13 @@ const ImageCarousel = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {imageCarousel.map((i) => (
+        {images.map((i) => (
           <figure
             className="relative w-full aspect-square flex-shrink-0 basis-full"
             key={i}
           >
             <Image
-              src={"/images/carousel/" + i}
+              src={i}
               alt={i}
               fill
               style={{
@@ -88,7 +80,7 @@ const ImageCarousel = () => {
         ))}
       </div>
       <div className="mt-6 flex items-center justify-center gap-x-2">
-        {imageCarousel.map((_i, index) => (
+        {images.map((_i, index) => (
           <button onClick={() => setCurrentImage(index)} key={index}>
             <span
               className={cn(

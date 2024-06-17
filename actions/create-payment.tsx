@@ -8,7 +8,12 @@ import sha256 from "sha256";
 import { formSchema } from "@/schema";
 import { createNewOrder, createNewPayment } from "@/lib/order";
 
-export const createPayment = async (v: z.infer<typeof formSchema>) => {
+export const createPayment = async (
+  v: z.infer<typeof formSchema>,
+  price: number,
+  number: string,
+  title: string
+) => {
   const merchantTransactionId = uniqid();
   const endpoint = "/pg/v1/pay";
 
@@ -16,11 +21,15 @@ export const createPayment = async (v: z.infer<typeof formSchema>) => {
     merchantId: process.env.MERCHANT_ID,
     merchantTransactionId,
     merchantUserId: 547,
-    amount: 39900,
+    amount: price,
     redirectUrl:
-      process.env.NEXT_PUBLIC_URL + "/confirm/" + merchantTransactionId,
+      process.env.NEXT_PUBLIC_URL +
+      "/confirm/" +
+      merchantTransactionId +
+      "?title=" +
+      title,
     redirectMode: "REDIRECT",
-    mobileNumber: "9999999999",
+    mobileNumber: number,
     paymentInstrument: {
       type: "PAY_PAGE",
     },

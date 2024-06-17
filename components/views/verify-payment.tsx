@@ -4,12 +4,12 @@ import { createShipment } from "@/actions/create-shipment";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 
-const VerifyPaymentStatus = ({ id }: { id: string }) => {
+const VerifyPaymentStatus = ({ id, title }: { id: string; title: string }) => {
   const [success, setSuccess] = useState<null | boolean>(null);
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    createShipment(id).then((res) => {
+    createShipment(id, title).then((res) => {
       console.log(res);
       if (res.success) {
         setMsg(`Order Placed Successfully OrderId:${res.success.data}`);
@@ -21,7 +21,7 @@ const VerifyPaymentStatus = ({ id }: { id: string }) => {
         setSuccess(false);
       }
     });
-  }, [id]);
+  }, [id, title]);
 
   const handleConfirm = (v: boolean) => {
     console.log("IT WORKs");
