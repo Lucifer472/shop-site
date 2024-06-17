@@ -1,6 +1,5 @@
 "use client";
 import * as z from "zod";
-import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -47,7 +46,6 @@ export const MainForm = ({
   setLoading: (v: boolean) => void;
 }) => {
   const router = useRouter();
-  const mainForm = useRef<HTMLFormElement | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,6 +75,7 @@ export const MainForm = ({
           setIsSuccess(true);
           setText(res.success);
         }
+        form.reset();
       });
     } else {
       createPayment(v).then((res) => {
@@ -89,6 +88,8 @@ export const MainForm = ({
           setIsSuccess(false);
           setText(res.error);
         }
+
+        form.reset();
       });
     }
   };
@@ -108,7 +109,6 @@ export const MainForm = ({
   return (
     <Form {...form}>
       <form
-        ref={mainForm}
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-y-4"
       >
@@ -332,7 +332,7 @@ export const MainForm = ({
             </FormItem>
           )}
         />
-        <AnimatedButton form={mainForm.current} />
+        <AnimatedButton />
       </form>
     </Form>
   );

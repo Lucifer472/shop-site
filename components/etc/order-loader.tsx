@@ -1,33 +1,31 @@
 "use client";
 
 import { ClipLoader } from "react-spinners";
-import { useRouter } from "next/navigation";
 
 import { confirmCodOrderRedirect, errorCodOrderRedirect } from "@/constant";
 
 export const OrderLoader = ({
-  loading,
   setLoading,
   msg,
   setMsg,
   text,
+  setText,
 }: {
-  loading: boolean;
   setLoading: (v: boolean) => void;
   msg: boolean | null;
   setMsg: (v: boolean | null) => void;
   text?: string;
+  setText: (v: string) => void;
 }) => {
-  const router = useRouter();
-
   const handleConfirm = (redirect: boolean) => {
     setLoading(false);
     setMsg(null);
+    setText("");
 
     if (redirect) {
-      router.push(confirmCodOrderRedirect);
+      window.location.href = confirmCodOrderRedirect;
     } else {
-      router.push(errorCodOrderRedirect);
+      window.location.href = errorCodOrderRedirect;
     }
   };
 

@@ -18,11 +18,11 @@ const OrderForm = () => {
       {loading && (
         <div className="fixed w-full flex items-center justify-center z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black h-full bg-opacity-30">
           <OrderLoader
-            loading={loading}
             msg={isSuccessful}
             setLoading={setLoading}
             setMsg={setIsSuccessful}
             text={msg}
+            setText={setMsg}
           />
         </div>
       )}

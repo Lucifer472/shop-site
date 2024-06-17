@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { productPrice } from "@/constant";
 import { useRouter } from "next/navigation";
 
-export const AnimatedButton = ({ form }: { form: HTMLFormElement | null }) => {
+export const AnimatedButton = () => {
   const [animateButton, setAnimateButton] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
@@ -35,23 +35,21 @@ export const AnimatedButton = ({ form }: { form: HTMLFormElement | null }) => {
     };
   }, [onScroll]);
 
-  const handleClick = (e: HTMLFormElement | null) => {
+  const handleClick = () => {
     if (isSticky) {
       router.push("#order-form");
     }
-    if (!e) return;
-
-    e.requestSubmit();
   };
 
   return (
     <button
-      onClick={() => handleClick(form)}
+      onClick={handleClick}
       className={cn(
         "w-full p-2 bg-main-green text-white text-center rounded-sm",
         animateButton && "button-animation",
         isSticky && "fixed bottom-0 left-0 z-50 rounded-none"
       )}
+      type="submit"
     >
       <span className="font-semibold">
         COMPLETE ORDER - Rs. {productPrice}.00

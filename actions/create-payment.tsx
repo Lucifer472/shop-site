@@ -7,7 +7,6 @@ import sha256 from "sha256";
 
 import { formSchema } from "@/schema";
 import { createNewOrder, createNewPayment } from "@/lib/order";
-import { db } from "@/lib/db";
 
 export const createPayment = async (v: z.infer<typeof formSchema>) => {
   const merchantTransactionId = uniqid();
@@ -51,14 +50,6 @@ export const createPayment = async (v: z.infer<typeof formSchema>) => {
     const res = await fetch(`${process.env.PHONE_PAY_API}${endpoint}`, options);
 
     const resData = await res.json();
-
-    const data = await db.order.findUnique({
-      where: {
-        number: v.number,
-      },
-    });
-
-    if (data) return { error: "Please Change the Number!" };
 
     const order = await createNewOrder(v, v.number, "Prepaid");
 

@@ -28,7 +28,7 @@ model Order {
   orderId       String?       
   Payment       PaymentMethod @default(COD)
   data          Json
-  number        String         @unique
+  number        String         
 
   transaction  Transaction?
 }

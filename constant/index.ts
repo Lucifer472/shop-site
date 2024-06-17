@@ -60,6 +60,6 @@ export const productTitle =
 export const productPrice = 499.0;
 export const productOriginalPrice = 999.0;
 
-export const confirmCodOrderRedirect = "/";
+export const confirmCodOrderRedirect = "https://zigzagmade.com/";
 
-export const errorCodOrderRedirect = "/";
+export const errorCodOrderRedirect = "http://zigzagmade.com/";
