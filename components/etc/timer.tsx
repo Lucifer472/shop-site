@@ -13,7 +13,7 @@ export const Timer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCountdown((prev) => {
-        if (prev.m === 0 && prev.s === 1) {
+        if (prev.m < 0 && prev.s > 1) {
           return { m: 0, s: 0 };
         }
 
