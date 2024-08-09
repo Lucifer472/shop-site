@@ -1,3 +1,4 @@
+import ClientWrapper from "@/components/client-wrapper";
 import ImageCarousel from "@/components/views/image-carousel";
 import OrderForm from "@/components/views/order-form";
 import Price from "@/components/views/price-sale";
@@ -17,11 +18,13 @@ const SlimFit = () => {
         {productTitle2}
       </h2>
       <Price price={productPrice2} ogPrice={productOriginalPrice2} />
-      <OrderForm
-        title={productTitle2}
-        price1={(productPrice2 - 100) * 100}
-        price2={productPrice2.toString() + ".00"}
-      />
+      <ClientWrapper>
+        <OrderForm
+          title={productTitle2}
+          price1={(productPrice2 - 100) * 100}
+          price2={productPrice2.toString() + ".00"}
+        />
+      </ClientWrapper>
       <div className="my-4"></div>
       <SlimFitDetail />
     </section>

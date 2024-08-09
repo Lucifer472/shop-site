@@ -1,3 +1,4 @@
+import ClientWrapper from "@/components/client-wrapper";
 import ImageCarousel from "@/components/views/image-carousel";
 import OrderForm from "@/components/views/order-form";
 import Price from "@/components/views/price-sale";
@@ -17,11 +18,13 @@ const HomePage = () => {
         {productTitle}
       </h2>
       <Price price={productPrice} ogPrice={productOriginalPrice} />
-      <OrderForm
-        title={productTitle}
-        price1={(productPrice - 100) * 100}
-        price2={productPrice.toString() + ".00"}
-      />
+      <ClientWrapper>
+        <OrderForm
+          title={productTitle}
+          price1={(productPrice - 100) * 100}
+          price2={productPrice.toString() + ".00"}
+        />
+      </ClientWrapper>
       <div className="my-4"></div>
       <ProductDetails />
     </section>

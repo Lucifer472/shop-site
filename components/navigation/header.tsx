@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import ReactPixel from "react-facebook-pixel";
 import { usePathname } from "next/navigation";
 import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
@@ -10,6 +11,9 @@ import Logo from "@/components/logo";
 import { navLinks } from "@/constant";
 
 const Header = () => {
+  ReactPixel.init("1229941751215934");
+  ReactPixel.pageView();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const pathname = usePathname();

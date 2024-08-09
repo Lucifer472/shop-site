@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import ReactPixel from "react-facebook-pixel";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -18,6 +19,8 @@ const OrderForm = ({
   const [msg, setMsg] = useState("");
   const [isSuccessful, setIsSuccessful] = useState<null | boolean>(null);
   const [loading, setLoading] = useState(false);
+
+  ReactPixel.track("track", "AddToCart");
 
   return (
     <>

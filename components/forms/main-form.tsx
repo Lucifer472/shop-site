@@ -1,5 +1,6 @@
 "use client";
 import * as z from "zod";
+import ReactPixel from "react-facebook-pixel";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -69,8 +70,11 @@ export const MainForm = ({
   });
 
   const onSubmit = (v: z.infer<typeof formSchema>) => {
+    ReactPixel.track("track", "CompleteRegistration");
+
     setLoading(true);
     if (v.type === "cod") {
+      ReactPixel.track("track", "Lead");
       createCodShipment(v, price2, title).then((res) => {
         if (res.error) {
           setIsSuccess(false);
@@ -84,6 +88,7 @@ export const MainForm = ({
         form.reset();
       });
     } else {
+      ReactPixel.track("track", "InitiateCheckout");
       createPayment(v, price1, v.number, title).then((res) => {
         if (res.success) {
           console.log(res.success);
